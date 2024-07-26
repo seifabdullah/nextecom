@@ -1,7 +1,7 @@
 'use client'
 
-import CategoryCreate from "@/components/nav/category/CategoryCreate";
-import CategoryList from "@/components/nav/category/CategoryList";
+import CategoryCreate from "@/components/category/CategoryCreate";
+import CategoryList from "@/components/category/CategoryList"
 
 export default function Categories() {
     return (

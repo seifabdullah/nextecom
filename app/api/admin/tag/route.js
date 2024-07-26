@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/utils/dbConnect";
-import Tag from "@/models/tag";
 import slugify from "slugify";
+import Tag from "@/models/tag";
+
 
 export async function POST(req) {
     const _req = await req.json();
     await dbConnect();
 
     try {
-        const { name, parent } = _req;
+        const { name, parentCategory } = _req;
 
         // Create a slug from the name
         const slug = slugify(name);
@@ -16,7 +17,7 @@ export async function POST(req) {
         // Create a new Tag document
         const tag = await Tag.create({
             name,
-            parent,
+            parentCategory,
             slug: slugify(name),
         });
 
