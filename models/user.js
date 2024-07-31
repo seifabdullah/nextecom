@@ -1,4 +1,3 @@
-import { type } from "express/lib/response";
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator"
 

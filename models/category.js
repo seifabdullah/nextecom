@@ -1,16 +1,15 @@
-// models/category.js
+import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 
-import mongoose from "mongoose";
-import uniqueValidator from "mongoose-unique-validator";
-
+// Define the schema
 const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
       trim: true,
       required: true,
-      minLength: 1,
-      maxLength: 20,
+      minlength: 1, // Use minlength instead of minLength for Mongoose validation
+      maxlength: 20, // Use maxlength instead of maxLength for Mongoose validation
     },
     slug: {
       type: String,
@@ -22,7 +21,10 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Apply the uniqueValidator plugin to categorySchema
 categorySchema.plugin(uniqueValidator);
 
-export default mongoose.models.Category ||
-  mongoose.model("Category", categorySchema);
+// Register model if not already registered
+const Category = mongoose.models.Category || mongoose.model('Category', categorySchema);
+
+export default Category;
