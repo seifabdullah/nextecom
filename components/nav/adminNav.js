@@ -13,7 +13,9 @@ export default function AdminNav(){
          <Link className="nav-link" href="/dashboard/admin/product">
         Add Product
 </Link>
-
+         <Link className="nav-link" href="/dashboard/admin/products">
+        View Products
+</Link>
         </nav>
     )
 }

@@ -27,7 +27,7 @@ export async function DELETE(req, context){
     await dbConnect()
 
     try{
-        const deletedProduct = await deletedProduct.findByIdAndDelete(context.params.id)
+        const deletedProduct = await Product.findByIdAndDelete(context.params.id)
         return NextResponse.json(deletedProduct)
     }catch(err){
         return NextResponse.json(err.message,{status:500})

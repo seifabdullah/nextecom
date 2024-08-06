@@ -9,14 +9,15 @@ const dbConnect = async () => {
   try {
     // Establish a new connection
     await mongoose.connect(process.env.DB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      // Add additional options here if necessary
+      // The following options are no longer needed
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000, // Optional: Increase timeout for better error handling
     });
     console.log('Connected to MongoDB');
   } catch (error) {
     // Log any connection errors
-    console.error('Error connecting to MongoDB:', error);
+    console.error('Error connecting to MongoDB:', error.message);
   }
 };
 

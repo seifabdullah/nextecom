@@ -23,6 +23,10 @@ export default function ProductCreate() {
   const { categories, fetchCategories } = useCategory();
   const { tags, fetchTags } = useTag();
 
+  const imagePreviews = updatingProduct
+    ? updatingProduct?.images ?? []
+    : product?.images ?? [];
+
   useEffect(() => {
     fetchCategories();
     fetchTags();
@@ -116,48 +120,110 @@ export default function ProductCreate() {
       </div>
 
       <div className="d-flex flex-wrap justify-content-evenly align-items-center">
-  {tags
-    ?.filter(
-      (tag) =>
-        tag?.parentCategory ===
-        (updatingProduct?.category?._id || product?.category?._id)
-    )
-    ?.map((tag) => (
-      <div key={tag?._id} className="form-check">
-        <input
-          type="checkbox"
-          value={tag?._id}
-          onChange={(e) => {
-            const tagId = e.target.value;
-            const tagName = tag?.name;
-            let selectedTags = updatingProduct
-              ? [...(updatingProduct?.tags ?? [])]
-              : [...(product?.tags ?? [])];
+        {tags
+          ?.filter(
+            (tag) =>
+              tag?.parentCategory ===
+              (updatingProduct?.category?._id || product?.category?._id)
+          )
+          ?.map((tag) => (
+            <div key={tag?._id} className="form-check">
+              <input
+                type="checkbox"
+                value={tag?._id}
+                onChange={(e) => {
+                  const tagId = e.target.value;
+                  const tagName = tag?.name;
+                  let selectedTags = updatingProduct
+                    ? [...(updatingProduct?.tags ?? [])]
+                    : [...(product?.tags ?? [])];
 
-            if (e.target.checked) {
-              selectedTags.push({ _id: tagId, name: tagName });
-            } else {
-              selectedTags = selectedTags.filter((t) => t._id !== tagId);
-            }
+                  if (e.target.checked) {
+                    selectedTags.push({ _id: tagId, name: tagName });
+                  } else {
+                    selectedTags = selectedTags.filter((t) => t._id !== tagId);
+                  }
 
-            if (updatingProduct) {
-              setUpdatingProduct({
-                ...updatingProduct,
-                tags: selectedTags,
-              });
-            } else {
-              setProduct({ ...product, tags: selectedTags });
-            }
-          }}
-        />
-        <label>{tag?.name}</label>
+                  if (updatingProduct) {
+                    setUpdatingProduct({
+                      ...updatingProduct,
+                      tags: selectedTags,
+                    });
+                  } else {
+                    setProduct({ ...product, tags: selectedTags });
+                  }
+                }}
+              />
+              <label>{tag?.name}</label>
+            </div>
+          ))}
       </div>
-    ))}
-</div>
 
-      
+      <div className="form-group mb-3">
+        <label
+          className={`btn btn-primary col-12 ${uploading ? "disabled" : ""}`}
+        >
+          {uploading ? "Processing" : "Upload Images"}
+
+          {/* Hidden file input */}
+          <input
+            type="file"
+            multiple
+            hidden
+            accept="image/*" 
+            onChange={uploadImages}
+            disabled={uploading}
+          />
+        </label>
+      </div>
+
+      <div className="d-flex justify-content-center">
+        {imagePreviews?.map((img) => (
+          <div key={img?.public_id}>
+            <img
+              src={img?.secure_url}
+              className="img-thumbnail mx-1 shadow"
+              style={{ width: "100px", height: "100px", objectFit: "cover" }}
+            />
+            <br />
+            <div
+              className="text-center pointer"
+              onClick={() => deleteImage(img?.public_id)}
+            >
+              ❌
+            </div>
+          </div>
+        ))}
+      </div>
+
+        <div className="d-flex justify-content-between mt-3">
+        <button
+  className={`btn btn-raised btn-${updatingProduct ? "info" : "primary"}`}
+  onClick={() => (updatingProduct ? updateProduct() : createProduct())}
+>
+  {updatingProduct ? "Update" : "Create"}
+</button>
+
+{updatingProduct && (
+  <>
+    <button
+      onClick={() => deleteProduct()}
+      className="btn btn-danger btn-raised"
+    >
+      Delete
+    </button>
+    <button
+      onClick={() => window.location.reload()}
+      className="btn btn-warning btn-raised"
+    >
+      Clear
+    </button>
+  </>
+)}
+
+    </div>
       <pre>
-        {JSON.stringify(product, null, 4)}
+        {/* {JSON.stringify(product, null, 4)} */}
       </pre>
     </div>
   );
