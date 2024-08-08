@@ -1,3 +1,7 @@
+import Pagination from "@/components/product/Pagination";
+import ProductCard from "@/components/product/ProductCard";
+
+
 
 async function getProducts(searchParams) {
   const searchQuery = new URLSearchParams({
@@ -19,15 +23,20 @@ async function getProducts(searchParams) {
 
 export default async function Home({ searchParams }) {
   // console.log("searchParams => ", searchParams);
-  const data = await getProducts(searchParams);
-  console.log(data);
+  const {products, currentPage, totalPages} = await getProducts(searchParams);
 
   return (
-    <div>
-      <h1 className="d-flex justify-content-center align-items-center vh-100 text-uppercase">
-        Home
+    <div className="container">
+      <h1 className="text-center mt-2">
+      <strong>Latest Products</strong>
       </h1>
-      <pre>{JSON.stringify(data, null, 4)}</pre>
+
+      <div className="row">
+          {products?.map((product) => (
+            <ProductCard  product={product}/>
+          ))}
+      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} pathname="/"/>
     </div>
   );
 }

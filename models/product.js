@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
+import Category from '@/models/category';
+import tag from '@/models/tag';
+import user from '@/models/user';
+
 
 const likeSchema = new mongoose.Schema({
   user: {
