@@ -5,12 +5,12 @@ import tag from '@/models/tag';
 import user from '@/models/user';
 
 
-const likeSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-}, { timestamps: true });
+// const likeSchema = new mongoose.Schema({
+//   user: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'User',
+//   },
+// }, { timestamps: true });
 
 const ratingSchema = new mongoose.Schema({
   rating: {
@@ -97,7 +97,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  likes: [likeSchema],
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+     ref: "User"
+  }],
   ratings: [ratingSchema],
 }, {
   timestamps: true,

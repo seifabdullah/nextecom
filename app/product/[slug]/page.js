@@ -1,7 +1,8 @@
 import ProductImage from "@/components/product/ProductImage"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-
+import ProductLike from "@/components/product/ProductLike"
+import ProductRating from "@/components/product/ProductRating"
 
 
 dayjs.extend(relativeTime)
@@ -46,7 +47,7 @@ export default async function ProductViewPage({params}) {
            </div>
 
            <div className="card-footer d-flex justify-content-between">
-                <small>Likes 🤍</small>
+                <ProductLike product={product}/>
                 <small>
                     Posted {dayjs(product?.createdAt).fromNow()}
                 </small>
@@ -54,7 +55,7 @@ export default async function ProductViewPage({params}) {
 
             <div className="card-footer d-flex justify-content-between">
                 <small> <strong>Brand :</strong> {product?.brand}</small>
-                <small>Stars 🌟</small>
+                <small><ProductRating /></small>
            </div> 
             </div>
             </div>

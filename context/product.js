@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Resizer from 'react-image-file-resizer';
@@ -16,7 +16,38 @@ export const ProductProvider = ({ children }) => {
   const [updatingProduct, setUpdatingProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
 
+  const [showImagePreviewModal, setShowImagePreviewModal] = useState(false);
+  const [currentImagePreviewUrl, setCurrentImagePreviewUrl] = useState("");
+
+//rating system
+  const [showRatingModal,setShowRatingModal] = useState(false)
+  const [currentRating,setCurrentRating] = useState(0)
+  const [comment, setComment] = useState("")
+
   const router = useRouter();
+
+  useEffect(() => {
+    window.addEventListener("click", handleClickOutside)
+    return () => {
+        window.removeEventListener('click', handleClickOutside)
+    }
+}, [])
+
+function handleClickOutside(event){
+    if(event.target.classList.contains("modal")){
+        closeModal()
+    }
+}
+const openModal = (url) => {
+    setCurrentImagePreviewUrl(url);
+    setShowImagePreviewModal(true);
+};
+
+const closeModal = () => {
+    setShowImagePreviewModal(false);
+    setCurrentImagePreviewUrl("");
+};
+
 
   const uploadImages = (e) => {
     let files = e.target.files;
@@ -247,6 +278,18 @@ export const ProductProvider = ({ children }) => {
         fetchProducts,
         updateProduct,
         deleteProduct,
+        showImagePreviewModal,
+        setShowImagePreviewModal, 
+        currentImagePreviewUrl,
+        setCurrentImagePreviewUrl,
+        openModal,
+        closeModal,
+        showRatingModal,
+        setShowRatingModal,
+        currentRating,
+        setCurrentRating,
+        comment,
+        setComment
       }}
     >
       {children}
