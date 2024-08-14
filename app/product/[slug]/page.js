@@ -52,10 +52,12 @@ export default async function ProductViewPage({params}) {
                     Posted {dayjs(product?.createdAt).fromNow()}
                 </small>
            </div>     
-
+    
             <div className="card-footer d-flex justify-content-between">
                 <small> <strong>Brand :</strong> {product?.brand}</small>
-                <small><ProductRating /></small>
+                <div className="card-footer my-5">
+                <small><ProductRating  product={product} /></small>
+                </div>
            </div> 
             </div>
             </div>

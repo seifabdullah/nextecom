@@ -9,7 +9,7 @@ import Modal from "@/components/Modal";
 import { useSession } from "next-auth/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
-export default function ProductRating({ product }) {
+export default function ProductRating({ product, leaveARating = true }) {
     const {
         showRatingModal,
         setShowRatingModal,
@@ -81,17 +81,21 @@ export default function ProductRating({ product }) {
     };
 
     return (
-        <div className="d-flex justify-content-between card-footer">
+        <div className="d-flex justify-content-between ">
             <div>
                 <Stars rating={averageRating} />
-                <small className="text-muted">({productRatings?.length})</small>
+                <small className="text-muted">
+                ({productRatings?.length})</small>
             </div>
-            <small
+            {leaveARating &&(
+                <small
                 onClick={() => setShowRatingModal(true)}
                 className="pointer"
             >
                 {alreadyRated ? "Update your rating" : "Leave a rating"}
             </small>
+             )}
+       
             {showRatingModal && (
                 <Modal>
                     <input

@@ -63,6 +63,26 @@ export const TagProvider = ({ children }) => {
         }
     }, []);
 
+
+    const fetchTagsPublic = useCallback(async () => {
+        setLoading(true); // Start loading
+        try {
+            const response = await fetch(`${process.env.API}/tags`);
+            if (!response.ok) {
+                const errorText = await response.text();
+                toast.error(`Error: ${response.status} - ${errorText}`);
+                console.error(`Error fetching tags: ${response.status} - ${errorText}`);
+                return;
+            }
+            const data = await response.json();
+            setTags(data);
+        } catch (err) {
+            console.error("Error fetching tags:", err);
+            toast.error("An error occurred while fetching tags. Please try again.");
+        } finally {
+            setLoading(false); // End loading
+        }
+    }, []);
     // Function to update a tag
     const updateTag = async () => {
         if (!updatingTag) return; // Avoid updating if no tag is selected
@@ -138,6 +158,7 @@ export const TagProvider = ({ children }) => {
                 updateTag,
                 deleteTag,
                 loading, // Added loading state to context
+                fetchTagsPublic
             }}
         >
             {children}
