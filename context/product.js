@@ -15,6 +15,8 @@ export const ProductProvider = ({ children }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [updatingProduct, setUpdatingProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
+  //brands
+  const [brands, setBrands] = useState([])
 
   const [showImagePreviewModal, setShowImagePreviewModal] = useState(false);
   const [currentImagePreviewUrl, setCurrentImagePreviewUrl] = useState("");
@@ -201,6 +203,24 @@ const closeModal = () => {
     }
   };
 
+  const fetchBrands = async () => {
+    try {
+      const response = await fetch(`${process.env.API}/product/brand`, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data?.err);
+      } else {
+        setBrands(data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const updateProduct = async () => {
     try {
       const response = await fetch(
@@ -289,7 +309,9 @@ const closeModal = () => {
         currentRating,
         setCurrentRating,
         comment,
-        setComment
+        setComment,
+        brands,
+        fetchBrands
       }}
     >
       {children}

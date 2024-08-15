@@ -1,8 +1,6 @@
 import Pagination from "@/components/product/Pagination";
 import ProductCard from "@/components/product/ProductCard";
 
-
-
 async function getProducts(searchParams) {
   const searchQuery = new URLSearchParams({
     page: searchParams?.page || 1,
@@ -23,20 +21,24 @@ async function getProducts(searchParams) {
 
 export default async function Home({ searchParams }) {
   // console.log("searchParams => ", searchParams);
-  const {products, currentPage, totalPages} = await getProducts(searchParams);
+  const { products, currentPage, totalPages } = await getProducts(searchParams);
 
   return (
     <div className="container">
       <h1 className="text-center mt-2">
-      <strong>Latest Products</strong>
+        <strong>Latest Products</strong>
       </h1>
 
       <div className="row">
-          {products?.map((product) => (
-            <ProductCard  product={product}/>
-          ))}
+        {products?.map((product) => (
+          <ProductCard product={product} />
+        ))}
       </div>
-      <Pagination currentPage={currentPage} totalPages={totalPages} pathname="/"/>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        pathname="/"
+      />
     </div>
   );
 }

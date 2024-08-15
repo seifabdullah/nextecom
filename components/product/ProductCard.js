@@ -21,14 +21,21 @@ export default function ProductCard({ product }) {
 
       <div className="card-body">
         <Link href={`/product/${product?.slug}`}>
-          <h5 className="card-title">{product?.title}</h5>
+          <h5 className="card-title">
+            {product?.title} |{" "}
+            <p className="card-price">
+              <strong style={{ textDecoration: "none" }}>
+                {product?.price.toFixed(2)} tnd
+              </strong>
+            </p>
+          </h5>
         </Link>
+
         <p className="card-description">
           {product?.description.length > 160
             ? `${product?.description.substring(0, 160)}...`
             : product?.description}
         </p>
-        <p className="card-price">{product?.price.toFixed(2)} tnd</p>
       </div>
 
       <div className="card-footer d-flex justify-content-between">
