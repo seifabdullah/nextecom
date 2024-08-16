@@ -7,7 +7,7 @@ export async function GET(req) {
   await dbConnect();
   const searchParams = queryString.parseUrl(req.url).query;
   const { page } = searchParams || {};
-  const pageSize = 6;
+  const pageSize = 4;
 
   try {
     const currentPage = Number(page) || 1;

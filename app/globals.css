@@ -1,74 +1,111 @@
-.pointer {
-  cursor: pointer;
+/* General Container Settings */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 15px;
 }
 
-/* styles.css */
+/* Header Styling */
+header {
+  padding: 2rem 0;
+}
 
-/* Styling for ProductCard */
+h1.display-4 {
+  font-size: 2.5rem;
+}
+
+p.lead {
+  font-size: 1.125rem;
+  color: #6c757d;
+}
+
+/* Card Styling */
 .card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem; /* More rounded corners for a softer look */
   overflow: hidden;
-  background-color: #fff;
-  transition: box-shadow 0.3s ease;
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 100%;
+  margin-bottom: 1.5rem; /* Space between cards */
 }
 
 .card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .card-image-container {
-  height: 200px;
+  position: relative;
+  height: 250px; /* Increased height for a more prominent image */
   overflow: hidden;
 }
 
-.card-title {
-  font-size: 1.25rem;
-  margin: 0;
+.card-image-container img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.card-description {
-  color: #555;
-  font-size: 0.9rem;
+.card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows the body to expand and fill the card */
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
 }
 
 .card-price {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #1c2b22; /* Green color for price */
-  margin-top: 10px;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #007bff;
+  margin-bottom: 0.75rem;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
 }
 
 .card-footer {
-  font-size: 0.9rem;
+  padding: 1rem;
+  border-top: 1px solid #f0f0f0;
+  background-color: #fafafa;
 }
 
 .card-footer small {
-  color: #777;
+  font-size: 0.875rem;
+  color: #888;
 }
 
-.card-footer .d-flex {
-  padding: 10px;
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .card-image-container {
+    height: 200px; /* Adjusted height for smaller screens */
+  }
 }
 
-.card-footer .align-items-center {
-  align-items: center;
-}
-
-.card-footer .justify-content-between {
-  justify-content: space-between;
-}
-
-.filter-scroll {
-  max-height: 200px;
-  overflow-y: scroll;
-}
-.filter-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-
-.filter-scroll::-webkit-scrollbar-thumb {
-  background-color: #fef2f2;
-  border-radius: 4px;
+@media (max-width: 576px) {
+  .card-title {
+    font-size: 1.25rem;
+  }
+  .card-price {
+    font-size: 1.125rem;
+  }
+  .card-description {
+    font-size: 0.85rem;
+  }
 }

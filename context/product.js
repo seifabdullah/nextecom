@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { createContext, useState, useContext, useEffect } from 'react';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import Resizer from 'react-image-file-resizer';
+import { createContext, useState, useContext, useEffect } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Resizer from "react-image-file-resizer";
 
 export const ProductContext = createContext();
 
@@ -15,44 +15,42 @@ export const ProductProvider = ({ children }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [updatingProduct, setUpdatingProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
-  //brands
-  const [brands, setBrands] = useState([])
-
+  const [brands, setBrands] = useState([]);
+  const [productSearchQuery, setProductSearchQuery] = useState("");
+  const [productSearchResults, setProductSearchResults] = useState([]);
   const [showImagePreviewModal, setShowImagePreviewModal] = useState(false);
   const [currentImagePreviewUrl, setCurrentImagePreviewUrl] = useState("");
-
-//rating system
-  const [showRatingModal,setShowRatingModal] = useState(false)
-  const [currentRating,setCurrentRating] = useState(0)
-  const [comment, setComment] = useState("")
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [currentRating, setCurrentRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const router = useRouter();
 
   useEffect(() => {
-    window.addEventListener("click", handleClickOutside)
-    return () => {
-        window.removeEventListener('click', handleClickOutside)
-    }
-}, [])
+    const handleClickOutside = (event) => {
+      if (event.target.classList.contains("modal")) {
+        closeModal();
+      }
+    };
 
-function handleClickOutside(event){
-    if(event.target.classList.contains("modal")){
-        closeModal()
-    }
-}
-const openModal = (url) => {
+    window.addEventListener("click", handleClickOutside);
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const openModal = (url) => {
     setCurrentImagePreviewUrl(url);
     setShowImagePreviewModal(true);
-};
+  };
 
-const closeModal = () => {
+  const closeModal = () => {
     setShowImagePreviewModal(false);
     setCurrentImagePreviewUrl("");
-};
-
+  };
 
   const uploadImages = (e) => {
-    let files = e.target.files;
+    const files = e.target.files;
     let allUploadedFiles = updatingProduct
       ? updatingProduct.images || []
       : product
@@ -77,21 +75,23 @@ const closeModal = () => {
             file,
             1280,
             720,
-            'JPEG',
+            "JPEG",
             100,
             0,
             (uri) => {
               fetch(`${process.env.API}/admin/upload/image`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                  'Content-Type': 'application/json',
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ image: uri }),
               })
                 .then((response) => {
                   if (!response.ok) {
                     return response.text().then((text) => {
-                      throw new Error(`HTTP error! Status: ${response.status}. Response: ${text}`);
+                      throw new Error(
+                        `HTTP error! Status: ${response.status}. Response: ${text}`
+                      );
                     });
                   }
                   return response.json();
@@ -101,12 +101,12 @@ const closeModal = () => {
                   resolve();
                 })
                 .catch((err) => {
-                  console.error('CLOUDINARY UPLOAD ERR', err.message);
+                  console.error("CLOUDINARY UPLOAD ERR", err.message);
                   toast.error(`Upload failed: ${err.message}`);
                   resolve();
                 });
             },
-            'base64'
+            "base64"
           );
         });
 
@@ -125,21 +125,19 @@ const closeModal = () => {
           setUploading(false);
         })
         .catch((error) => {
-          console.error('Error uploading images: ', error.message);
+          console.error("Error uploading images: ", error.message);
           setUploading(false);
         });
     }
   };
 
-  
-
   const deleteImage = (public_id) => {
     setUploading(true);
 
     fetch(`${process.env.API}/admin/upload/image`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ public_id }),
     })
@@ -156,8 +154,8 @@ const closeModal = () => {
           : setProduct({ ...product, images: filteredImages });
       })
       .catch((err) => {
-        toast.error('Image delete failed');
-        console.log('CLOUDINARY DELETE ERR', err);
+        toast.error("Image delete failed");
+        console.log("CLOUDINARY DELETE ERR", err);
       })
       .finally(() => {
         setUploading(false);
@@ -167,16 +165,18 @@ const closeModal = () => {
   const createProduct = async () => {
     try {
       const response = await fetch(`${process.env.API}/admin/product`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(product),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       const data = await response.json();
       if (!response.ok) {
         toast.error(data.err);
       } else {
-        toast.success(`Product "${data?.title}" created`);E
+        toast.success(`Product "${data?.title}" created`);
         router.push("/dashboard/admin/product");
-        // window.location.reload();
       }
     } catch (err) {
       console.log(err);
@@ -186,7 +186,7 @@ const closeModal = () => {
   const fetchProducts = async (page = 1) => {
     try {
       const response = await fetch(`${process.env.API}/product?page=${page}`, {
-        method: 'GET',
+        method: "GET",
       });
 
       const data = await response.json();
@@ -206,7 +206,7 @@ const closeModal = () => {
   const fetchBrands = async () => {
     try {
       const response = await fetch(`${process.env.API}/product/brand`, {
-        method: 'GET',
+        method: "GET",
       });
 
       const data = await response.json();
@@ -214,7 +214,7 @@ const closeModal = () => {
       if (!response.ok) {
         toast.error(data?.err);
       } else {
-        setBrands(data)
+        setBrands(data);
       }
     } catch (err) {
       console.log(err);
@@ -226,8 +226,11 @@ const closeModal = () => {
       const response = await fetch(
         `${process.env.API}/admin/product/${updatingProduct?._id}`,
         {
-          method: 'PUT',
+          method: "PUT",
           body: JSON.stringify(updatingProduct),
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
       const data = await response.json();
@@ -235,8 +238,7 @@ const closeModal = () => {
         toast.error(data?.err);
       } else {
         toast.success(`Product "${data?.title}" updated`);
-        // router.back();
-        window.location.href = "/dashboard/admin/products"
+        window.location.href = "/dashboard/admin/products";
       }
     } catch (err) {
       console.log(err);
@@ -244,38 +246,61 @@ const closeModal = () => {
   };
 
   const deleteProduct = async () => {
-    setUploading(true); // Optional: Show loading state
-  
+    setUploading(true);
+
     try {
       const response = await fetch(
         `${process.env.API}/admin/product/${updatingProduct?._id}`,
         {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
-  
+
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}. Response: ${errorText}`);
+        throw new Error(
+          `HTTP error! Status: ${response.status}. Response: ${errorText}`
+        );
       }
-  
+
       const data = await response.json();
-      
+
       toast.success(`Product "${data?.title}" deleted`);
-  
-      // Optionally: Redirect to previous page or update state
+
       router.back();
     } catch (err) {
       toast.error(`Failed to delete product: ${err.message}`);
-      console.error('Product DELETE ERR', err);
+      console.error("Product DELETE ERR", err);
     } finally {
-      setUploading(false); // Hide loading state
+      setUploading(false);
     }
   };
-  
+
+  const fetchProductSearchResults = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${process.env.API}/search/products?productSearchQuery=${productSearchQuery}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setProductSearchResults(data);
+
+      router.push(`/search/products?productSearchQuery=${productSearchQuery}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ProductContext.Provider
@@ -299,7 +324,7 @@ const closeModal = () => {
         updateProduct,
         deleteProduct,
         showImagePreviewModal,
-        setShowImagePreviewModal, 
+        setShowImagePreviewModal,
         currentImagePreviewUrl,
         setCurrentImagePreviewUrl,
         openModal,
@@ -311,7 +336,12 @@ const closeModal = () => {
         comment,
         setComment,
         brands,
-        fetchBrands
+        fetchBrands,
+        productSearchQuery,
+        setProductSearchQuery,
+        productSearchResults,
+        setProductSearchResults,
+        fetchProductSearchResults,
       }}
     >
       {children}

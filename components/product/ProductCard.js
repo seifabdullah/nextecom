@@ -8,7 +8,7 @@ dayjs.extend(relativeTime);
 
 export default function ProductCard({ product }) {
   return (
-    <div className="card mb-4 col-lg-4 my-3">
+    <div className="card shadow-sm border-light rounded d-flex flex-column">
       <div className="card-image-container">
         <Image
           src={product?.images?.[0]?.secure_url || "/images/default.jpeg"}
@@ -18,45 +18,38 @@ export default function ProductCard({ product }) {
           alt={product?.title || "Product Image"}
         />
       </div>
-
-      <div className="card-body">
-        <Link href={`/product/${product?.slug}`}>
-          <h5 className="card-title">
-            {product?.title} |{" "}
-            <p className="card-price">
-              <strong style={{ textDecoration: "none" }}>
-                {product?.price.toFixed(2)} tnd
-              </strong>
-            </p>
-          </h5>
+      <div className="card-body d-flex flex-column">
+        <Link
+          href={`/product/${product?.slug}`}
+          className="text-decoration-none"
+        >
+          <h5 className="card-title text-dark">{product?.title}</h5>
+          <p className="card-price text-primary">
+            <strong>{product?.price.toFixed(2)} TND</strong>
+          </p>
         </Link>
-
-        <p className="card-description">
-          {product?.description.length > 160
-            ? `${product?.description.substring(0, 160)}...`
+        <p className="card-description text-muted mt-2">
+          {product?.description.length > 120
+            ? `${product?.description.substring(0, 120)}...`
             : product?.description}
         </p>
-      </div>
-
-      <div className="card-footer d-flex justify-content-between">
-        <small>
-          <strong>Category:</strong> {product?.category?.name}
-        </small>
-        <small>
-          <strong>Tags:</strong> {product?.tags?.map((t) => t?.name).join(", ")}
-        </small>
-      </div>
-
-      <div className="card-footer d-flex justify-content-between">
-        <small>Likes 🤍</small>
-        <small>Posted {dayjs(product?.createdAt).fromNow()}</small>
-      </div>
-
-      <div className="card-footer d-flex justify-content-between align-items-center">
-        <small>
-          <strong>Brand:</strong> {product?.brand}
-        </small>
-        <ProductRating product={product} leaveARating={false} />
+        <div className="mt-auto">
+          <small className="text-muted">
+            <strong>Category:</strong> {product?.category?.name}
+          </small>
+          <small className="text-muted">
+            <strong>Tags:</strong>{" "}
+            {product?.tags?.map((t) => t?.name).join(", ")}
+          </small>
+          <small className="text-muted">Likes 🤍</small>
+          <small className="text-muted">
+            Posted {dayjs(product?.createdAt).fromNow()}
+          </small>
+          <small className="text-muted">
+            <strong>Brand:</strong> {product?.brand}
+          </small>
+          <ProductRating product={product} leaveARating={false} />
+        </div>
       </div>
     </div>
   );

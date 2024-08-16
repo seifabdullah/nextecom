@@ -20,25 +20,36 @@ async function getProducts(searchParams) {
 }
 
 export default async function Home({ searchParams }) {
-  // console.log("searchParams => ", searchParams);
   const { products, currentPage, totalPages } = await getProducts(searchParams);
 
   return (
-    <div className="container">
-      <h1 className="text-center mt-2">
-        <strong>Latest Products</strong>
-      </h1>
+    <div className="container mt-4">
+      <header className="text-center mb-5">
+        <h1 className="display-4 font-weight-bold">Latest Products</h1>
+        <p className="lead text-muted">
+          Discover the latest additions to our catalog. Browse through our
+          featured products below.
+        </p>
+      </header>
 
-      <div className="row">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
         {products?.map((product) => (
-          <ProductCard product={product} />
+          <div
+            key={product._id}
+            className="col d-flex align-items-center justify-content-center"
+          >
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        pathname="/"
-      />
+
+      <div className="d-flex justify-content-center mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pathname="/"
+        />
+      </div>
     </div>
   );
 }
