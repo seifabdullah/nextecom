@@ -1,6 +1,11 @@
 import Pagination from "@/components/product/Pagination";
 import ProductCard from "@/components/product/ProductCard";
 
+export const metadata = {
+  title: "Next E-commerce",
+  description: "Find the latest in fashion, electronics and more",
+};
+
 async function getProducts(searchParams) {
   const searchQuery = new URLSearchParams({
     page: searchParams?.page || 1,

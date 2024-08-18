@@ -15,28 +15,29 @@ export default function Register() {
     setLoading(true);
 
     try {
-        const response = await fetch(`${process.env.API}/register`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name,
-              email,
-              password,
-            }),
-          });
+      const response = await fetch(`${process.env.API}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.err);
-        setLoading(false);
+        toast.error(data.error || "Registration failed.");
       } else {
-        toast.success(data.success);
+        toast.success("Registration successful! Please log in.");
         router.push("/login");
       }
     } catch (err) {
-      toast.error("An error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
@@ -48,32 +49,54 @@ export default function Register() {
           <div className="col-lg-5 shadow bg-light p-5">
             <h2 className="mb-4 text-center">Register</h2>
             <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="form-control mb-4"
-                placeholder="Enter your name"
-              />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="form-control mb-4"
-                placeholder="Enter your email"
-              />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="form-control mb-4"
-                placeholder="Enter your password"
-              />
+              <div className="mb-4">
+                <label htmlFor="name" className="form-label">
+                  Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="form-control"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="form-label">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
               <button
+                type="submit"
                 className="btn btn-primary btn-raised"
                 disabled={loading || !name || !email || !password}
               >
-                {loading ? "Please wait.." : "Submit"}
+                {loading ? "Please wait..." : "Submit"}
               </button>
             </form>
           </div>

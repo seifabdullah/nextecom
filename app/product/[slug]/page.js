@@ -3,8 +3,20 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import ProductLike from "@/components/product/ProductLike";
 import ProductRating from "@/components/product/ProductRating";
+import UserReviews from "@/components/product/UserReviews";
 
 dayjs.extend(relativeTime);
+
+export async function generateMetadata({ params }) {
+  const product = await getProduct(params.slug);
+  return {
+    title: product?.title,
+    description: product?.description?.substr(0, 160),
+    openGraph: {
+      image: product?.images[0]?.url,
+    },
+  };
+}
 
 async function getProduct(slug) {
   const response = await fetch(`${process.env.API}/product/${slug}`, {
@@ -121,13 +133,17 @@ export default async function ProductViewPage({ params }) {
                 <ProductRating product={product} />
               </div>
             </div>
+
+            {/* User Reviews */}
+            <div className="card-footer mt-4">
+              <UserReviews reviews={product?.ratings} />
+            </div>
           </div>
 
           {/* Related Products */}
           <div className="row">
             <div className="col">
               <h4 style={relatedProductsHeadingStyle}>Related Products</h4>
-              {/* Here you can add a component or logic to fetch and display related products */}
             </div>
           </div>
         </div>

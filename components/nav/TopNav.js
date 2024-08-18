@@ -2,9 +2,13 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useProduct } from "@/context/product";
+import { BsFillCartCheckFill } from "react-icons/bs";
+import { useCart } from "@/context/cart";
 
 export default function TopNav() {
   const { data, status } = useSession();
+  const { cartItems } = useCart();
+
   const {
     productSearchQuery,
     setProductSearchQuery,
@@ -40,6 +44,10 @@ export default function TopNav() {
 
       {status === "authenticated" ? (
         <div className="d-flex justify-content-end">
+          <Link className="nav-link text-danger" href="/cart">
+            <BsFillCartCheckFill size={25} /> {cartItems?.length}
+          </Link>
+
           <Link
             href={`/dashboard/${
               data?.user?.role === "admin" ? "admin" : "user"
@@ -57,6 +65,9 @@ export default function TopNav() {
         </div>
       ) : (
         <div className="d-flex">
+          <Link className="nav-link text-danger" href="/cart">
+            <BsFillCartCheckFill size={25} /> {cartItems?.length}
+          </Link>
           <Link href="/login" className="nav-link btn btn-outline-primary">
             Login
           </Link>
